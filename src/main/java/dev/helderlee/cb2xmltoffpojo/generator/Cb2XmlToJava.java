@@ -41,6 +41,8 @@ public class Cb2XmlToJava {
     }
 
     public void generate() throws ParserConfigurationException, SAXException, IOException {
+        Files.createDirectories(Paths.get(targetDirectory.getAbsolutePath()));
+
         final DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
         final DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
         final Document doc = docBuilder.parse(this.xmlFile);
@@ -143,7 +145,7 @@ public class Cb2XmlToJava {
 
         writeListDecorator();
     }
-    
+
     private void writeListDecorator() throws IOException {
         VelocityEngine velocityEngine = new VelocityEngine();
         velocityEngine.setProperty("resource.loader", "class");
@@ -157,7 +159,7 @@ public class Cb2XmlToJava {
 
         StringWriter writer = new StringWriter();
         t.merge(context, writer);
-        
+
         try (FileWriter listDecoratorWriter = new FileWriter(Paths.get(
                 targetDirectory.getAbsolutePath(),
                 packageName, "decorator",
