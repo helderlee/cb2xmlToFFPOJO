@@ -1,0 +1,73 @@
+package ${packageName};
+
+import com.github.ffpojo.FFPojoHelper;
+import com.github.ffpojo.decorator.util.CollectionDecoratorUtil;
+import com.github.ffpojo.exception.FieldDecoratorException;
+import com.github.ffpojo.metadata.extra.ExtendedFieldDecorator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class ListDecorator<E> extends ExtendedFieldDecorator<List<E>> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger("ListDecorator");
+
+    private Class clazz;
+    private Integer occurrences;
+    private CollectionDecoratorUtil collectionDecoratorUtil;
+
+    public ListDecorator(Class clazz, Integer occurrences) {
+        this.collectionDecoratorUtil = new CollectionDecoratorUtil(clazz);
+        this.clazz = clazz;
+        this.occurrences = occurrences;
+    }
+
+    public String toString(List<E> lista) throws FieldDecoratorException {
+        StringBuilder sb = new StringBuilder();
+        for (Iterator iterator = lista.iterator(); iterator.hasNext(); ) {
+            Object object = iterator.next();
+            String s = FFPojoHelper.getInstance().parseToText(object);
+            sb.append(s);
+        }
+        int diferenca = this.occurrences - lista.size();
+        if (diferenca > 0) {
+            try {
+                Object complemento = clazz.newInstance();
+                String s = FFPojoHelper.getInstance().parseToText(complemento);
+                for (int i = 1; i <= diferenca; i++) {
+                    sb.append(s);
+                }
+            } catch (InstantiationException e) {
+                LOGGER.error(e.getMessage());
+            } catch (IllegalAccessException e) {
+                LOGGER.error(e.getMessage());
+            }
+        }
+        return sb.toString();
+    }
+
+    public List<E> fromString(String field) throws FieldDecoratorException {
+        if (field == null || field.isEmpty()) return null;
+        int objectLineSize = collectionDecoratorUtil.objectLineSize();
+        int resto = (field.length() % objectLineSize);
+        int acrescimo = 0;
+        if (resto > 0) {
+            acrescimo = objectLineSize - resto;
+        }
+        String padded = String.format("%-" + (field.length() + acrescimo) + "s", field);
+        int index = 0;
+        List listObjects = new ArrayList();
+        while (index < padded.length()) {
+            int finalPosition = index + objectLineSize;
+            String item = padded.substring(index, finalPosition);
+            Object o = FFPojoHelper.getInstance().createFromText(clazz, item);
+            listObjects.add(o);
+            index = finalPosition;
+        }
+        return listObjects;
+    }
+}
+
