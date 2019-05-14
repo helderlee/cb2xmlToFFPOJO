@@ -1,27 +1,29 @@
 package dev.helderlee.cb2xmltoffpojo.generator;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.WordUtils;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import static com.google.common.base.CaseFormat.*;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import org.apache.commons.text.WordUtils;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.google.common.base.CaseFormat.*;
 
 public class Cb2XmlToJava {
 
@@ -120,7 +122,7 @@ public class Cb2XmlToJava {
 
         Files.createDirectories(Paths.get(
                 targetDirectory.getAbsolutePath(),
-                packageName));
+                packageName, "decorator"));
 
         copybookClassFileWriter = new FileWriter(Paths.get(
                 targetDirectory.getAbsolutePath(),
@@ -160,12 +162,13 @@ public class Cb2XmlToJava {
         StringWriter writer = new StringWriter();
         t.merge(context, writer);
 
-        try (FileWriter listDecoratorWriter = new FileWriter(Paths.get(
+        FileWriter listDecoratorWriter = new FileWriter(Paths.get(
                 targetDirectory.getAbsolutePath(),
                 packageName, "decorator",
-                "ListDecorator.java").toString())) {
-            listDecoratorWriter.write(writer.toString());
-        }
+                "ListDecorator.java").toString());
+
+        listDecoratorWriter.write(writer.toString());
+
     }
 
     private void writePlainClassFile(final Element e) throws IOException {

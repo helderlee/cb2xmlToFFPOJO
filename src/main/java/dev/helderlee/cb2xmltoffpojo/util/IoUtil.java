@@ -17,10 +17,8 @@ public class IoUtil {
     }
     
     public static File getDirectory(String directory) {
-        String currentDir = System.getProperty("user.dir");
-        Path currentPath = Paths.get(currentDir);
-        Path directoryPath = Paths.get(currentPath.toString(), directory);
-        return directoryPath.toFile();
+        Path currentPath = Paths.get(directory);
+        return currentPath.toFile();
     }
     
 }
