@@ -6,7 +6,7 @@ https://sourceforge.net/projects/cb2xml/files/
 
 Build the project.
 
-Run the jar:
+Run the jar in the target folder:
 
 ```
 java -jar cb2xmlToFFPOJO.one-jar.jar <sourceDir> <targetDir>
