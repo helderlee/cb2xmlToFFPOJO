@@ -12,6 +12,6 @@ Run the jar:
 java -jar cb2xmlToFFPOJO.one-jar.jar <sourceDir> <targetDir>
 ```
 
-<sourceDir> : folder containing the xml file
+sourceDir : full path to folder containing the xml file
 
-<targetDir> : folder for generated classes
+targetDi> : full path to folder for generated classes
