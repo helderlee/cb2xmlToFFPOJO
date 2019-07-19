@@ -274,7 +274,9 @@ public class Cb2XmlToJava {
             sb.append(Integer.parseInt(e.getAttribute("position"))
                     + Integer.parseInt(e.getAttribute("storage-length")) - 1);
         }
-        if (picture.contains("V")) {
+        if (picture.contains("X")) {
+            // append nothing
+        } else if (picture.contains("V")) {
             sb.append(", paddingCharacter = '0', paddingAlign = PaddingAlign.LEFT, decorator = SignedDoubleDecorator.class");
         } else if (picture.contains("9")) {
             sb.append(", paddingCharacter = '0', paddingAlign = PaddingAlign.LEFT, decorator = SignedLongDecorator.class");
