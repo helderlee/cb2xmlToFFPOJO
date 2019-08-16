@@ -130,9 +130,10 @@ public class Cb2XmlToJava {
                 classFilename).toString());
 
         StringBuilder sb = new StringBuilder();
-        sb.append("package ").append(packageName).append(";\n");
+        sb.append("package br.com.sulamerica.residencial.cics.").append(packageName).append(";\n");
         sb.append("\n");
-        sb.append("import ").append(packageName).append(".decorator.*;\n");
+        sb.append("import br.com.sulamerica.residencial.cics.decorator.*;\n");
+        sb.append("import br.com.sulamerica.residencial.cics.").append(packageName).append(".decorator.*;\n");
         sb.append("import com.github.ffpojo.metadata.positional.*;\n");
         sb.append("import com.github.ffpojo.metadata.positional.annotation.*;\n");
         sb.append("import lombok.Data;\n");
@@ -187,9 +188,10 @@ public class Cb2XmlToJava {
                 classFilename).toString());
 
         StringBuilder sb = new StringBuilder();
-        sb.append("package ").append(packageName).append(";\n");
+        sb.append("package br.com.sulamerica.residencial.cics.").append(packageName).append(";\n");
         sb.append("\n");
-        sb.append("import ").append(packageName).append(".decorator.*;\n");
+        sb.append("import br.com.sulamerica.residencial.cics.decorator.*;\n");
+        sb.append("import br.com.sulamerica.residencial.cics.").append(packageName).append(".decorator.*;\n");
         sb.append("import com.github.ffpojo.metadata.positional.*;\n");
         sb.append("import com.github.ffpojo.metadata.positional.annotation.*;\n");
         sb.append("import lombok.Data;\n");
@@ -223,8 +225,8 @@ public class Cb2XmlToJava {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append("package ").append(packageName).append(".decorator;\n\n");
-        sb.append("import ").append(packageName).append(".*;\n\n");
+        sb.append("package br.com.sulamerica.residencial.cics.").append(packageName).append(".decorator;\n\n");
+        sb.append("import br.com.sulamerica.residencial.cics.").append(packageName).append(".*;\n\n");
 
         sb.append("public class ");
         sb.append(className);
@@ -277,7 +279,12 @@ public class Cb2XmlToJava {
         if (picture.contains("X")) {
             // append nothing
         } else if (picture.contains("V")) {
-            sb.append(", paddingCharacter = '0', paddingAlign = PaddingAlign.LEFT, decorator = SignedDoubleDecorator.class");
+            String scale = e.getAttribute("scale");
+            if ("5".equals(scale)) {
+                sb.append(", paddingCharacter = '0', paddingAlign = PaddingAlign.LEFT, decorator = SignedDoublePrecision5Decorator.class");
+            } else {
+                sb.append(", paddingCharacter = '0', paddingAlign = PaddingAlign.LEFT, decorator = SignedDoublePrecision2Decorator.class");
+            }
         } else if (picture.contains("9")) {
             sb.append(", paddingCharacter = '0', paddingAlign = PaddingAlign.LEFT, decorator = SignedLongDecorator.class");
         }
